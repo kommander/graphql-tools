@@ -1,5 +1,7 @@
 # Change log
 
+* Make mergeSchemas optionally merge directive definitions <br/> [@freiksenet](https://github.com/freiksenet) in [#1003](https://github.com/apollographql/graphql-tools/pull/1003)
+
 ### 4.0.3
 
 * Replaced broken link in docs homepage with Launchpad example <br />
