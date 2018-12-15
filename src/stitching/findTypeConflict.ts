@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import {
   GraphQLNamedType,
+  GraphQLField,
   GraphQLSchema,
   isNamedType,
   GraphQLObjectType
@@ -25,8 +26,8 @@ export type OnTypeConflict = (
 
 export type OnFieldConflict = (
   fieldName: String,
-  left: GraphQLNamedType,
-  right: GraphQLNamedType,
+  left: GraphQLField<any, any>,
+  right: GraphQLField<any, any>,
   info: ConflictInfo,
 ) => void;
 
@@ -75,11 +76,13 @@ export function findTypeConflict(schemas: Array<GraphQLSchema>, {
           }
 
           if (type instanceof GraphQLObjectType && !ignoreFieldCheck.includes(typeName)) {
-            const leftFields = Object.keys(left[typeName].type.getFields());
-            const rightFields = Object.keys(type.getFields());
+            const leftFields = left[typeName].type.getFields();
+            const rightFields = type.getFields();
+            const leftFieldKeys = Object.keys(leftFields);
+            const rightFieldKeys = Object.keys(rightFields);
 
-            rightFields.forEach(fieldName => {
-              if (leftFields.includes(fieldName)) {
+            rightFieldKeys.forEach(fieldName => {
+              if (leftFieldKeys.includes(fieldName)) {
                 onFieldConflict(
                   fieldName,
                   leftFields[fieldName],
